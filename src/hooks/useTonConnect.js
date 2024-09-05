@@ -1,5 +1,5 @@
 import { CHAIN } from "@tonconnect/protocol";
-import { useTonConnectUI, useTonWallet } from "@tonconnect/ui-react";
+import { useTonConnectUI, useTonWallet, useTonAddress } from "@tonconnect/ui-react";
 
 const getNetworkName = (chainId) => {
     return Object.keys(CHAIN).find(key => CHAIN[key] === chainId);
@@ -11,7 +11,7 @@ export function useTonConnect() {
 
   const networkId = wallet?.account.chain ?? null;
   const network = networkId ? getNetworkName(networkId).toLocaleLowerCase() : null;
-
+  const userFriendlyAddress = useTonAddress();
   return {
     sender: {
       send: async (args) => {
@@ -28,7 +28,8 @@ export function useTonConnect() {
       },
     },
     connected: !!wallet?.account.address,
-    wallet: wallet?.account.address ?? null,
+    // wallet: wallet?.account.address ? base58Encode(wallet.account.address) : null,
+    wallet: userFriendlyAddress? userFriendlyAddress : null,
     network: network,
   };
 }
