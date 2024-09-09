@@ -1,27 +1,28 @@
-import React from 'react';
+import React from "react";
 import { TonConnectButton } from "@tonconnect/ui-react";
 import { AppBar, Toolbar, Button } from "@mui/material";
-import { Link } from 'react-router-dom'; // Import Link if using React Router
-import { ROUTES } from '../routes';
+import { Link } from "react-router-dom"; // Import Link if using React Router
+import { ROUTES } from "../routes";
+import { isConnectedMainNet } from "../utils/validations";
 
-export default function NavBar({ network }) { // Ensure network is passed as a prop
+export default function NavBar({ network, isConnected }) {
+    const shouldDisplaySubscription = () => isConnectedMainNet(isConnected, network);
   return (
     <AppBar position="sticky" sx={{ marginBottom: 4 }}>
       <Toolbar sx={{ justifyContent: "flex-end" }}>
-        {/* Conditionally Render Based on Mainnet */}
-        {network === "mainnet" && (
-          <>
-            <Button color="inherit" component={Link} to={ROUTES.HOME}>
-              home
-            </Button>
+        <>
+          <Button color="inherit" component={Link} to={ROUTES.HOME}>
+            home
+          </Button>
+          { shouldDisplaySubscription && ( 
             <Button color="inherit" component={Link} to={ROUTES.SUBSCRIPTION}>
               subscription
             </Button>
-            <Button color="inherit" component={Link} to={ROUTES.ABOUT}>
-              about
-            </Button>
-          </>
-        )}
+          )}
+          <Button color="inherit" component={Link} to={ROUTES.ABOUT}>
+            about
+          </Button>
+        </>
         {/* TonConnectButton */}
         <TonConnectButton />
       </Toolbar>

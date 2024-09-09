@@ -1,7 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTonConnect } from "./hooks/useTonConnect";
-import { Grid2, Box, Typography } from "@mui/material";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Grid2 as Grid, Box } from "@mui/material";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import About from "./pages/About";
 import Subscription from "./pages/Subscription";
 import NavBar from "./components/NavBar";
@@ -9,11 +14,15 @@ import Home from "./pages/Home";
 
 function App() {
   const { network, wallet } = useTonConnect(); // Get the wallet from the hook
+  const [isConnected, setIsConnected] = useState(false);
 
-  // Log the wallet address whenever it changes
+  // Log the wallet address and set connection status
   useEffect(() => {
     if (wallet) {
-      console.warn('<ocv> Connected wallet ID:', wallet); // Log the wallet 
+      console.warn("<ocv> Connected wallet ID:", wallet); // Log the wallet
+      setIsConnected(true); // Set as true when the wallet is connected
+    } else {
+      setIsConnected(false); // Set as false when there is no wallet
     }
   }, [wallet]);
 
@@ -21,44 +30,50 @@ function App() {
     <Router>
       <Box
         sx={{
-          backgroundColor: '#e8e8e8',
-          color: 'black',
-          minHeight: '100vh',
-          minWidth: '100vw',
-          padding: '20px',
-          '@media (prefers-color-scheme: dark)': {
-            backgroundColor: '#999',
-            color: 'white',
+          backgroundColor: "#e8e8e8",
+          color: "black",
+          minHeight: "100vh",
+          minWidth: "100vw",
+          padding: "20px",
+          "@media (prefers-color-scheme: dark)": {
+            backgroundColor: "#999",
+            color: "white",
           },
         }}
       >
-        <NavBar network={network}/>
+        {/* Pass the wallet to NavBar */}
+        <NavBar network={network} isConnected={isConnected} />
+
         {/* Main Content */}
-        <Grid2 container spacing={2} justifyContent="center">
+        <Grid container spacing={2} justifyContent="center">
           {/* Left Side - Empty but Resizable */}
-          <Grid2 item xs={false} md={2} />
+          <Grid item xs={false} md={2} />
 
           {/* Main Content in the Middle */}
-          <Grid2 item xs={12} md={8}>
-            <Typography variant="h6" sx={{ marginTop: 2 }}>
-              {network
-                ? network === "mainnet"
-                  ? "Connected to Mainnet"
-                  : "Connected to Testnet"
-                : "Disconnected"}
-            </Typography>
-          </Grid2>
+          <Grid item xs={12} md={8}>
+            {/* Routes */}
+            <Routes>
+              <Route path="/" element={<Home isConnected={isConnected} />} />
+              <Route path="/about" element={<About />} />
+
+              {/* Protect the subscription route */}
+              {isConnected ? (
+                <Route
+                  path="/subscription"
+                  element={<Subscription isConnected={isConnected} />}
+                />
+              ) : (
+                <Route
+                  path="/subscription"
+                  element={<Navigate to="/" replace />}
+                />
+              )}
+            </Routes>
+          </Grid>
 
           {/* Right Side - Empty but Resizable */}
-          <Grid2 item xs={false} md={2} />
-        </Grid2>
-
-        {/* Routes */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/subscription" element={<Subscription />} />
-        </Routes>
+          <Grid item xs={false} md={2} />
+        </Grid>
       </Box>
     </Router>
   );
