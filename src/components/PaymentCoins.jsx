@@ -5,10 +5,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
-export default function PaymentCoins({ paimentCoinHandler }) {
+export default function PaymentCoins({ paymentCoinHandler }) {
     const handleChange = (event) => {
-        console.log('Change event: ', event.target.value);
-        subscriptionPlanHandler(event.target.value);
+        console.log('Change event coin: ', event.target.value);
+        paymentCoinHandler(event.target.value);
     };
 
     return (
