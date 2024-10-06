@@ -1,0 +1,48 @@
+/* First row: Chips */
+.chip-container {
+    display: flex;
+    justify-content:space-around;
+    margin-top: 1em;
+    gap: 1em;
+    width: 100%;
+  }
+  
+  /* Customize Chip styles */
+  .custom-chip {
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px;
+    margin: 0 10px; /* Add space between the chips */
+  }
+  
+  .primary-chip {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .secondary-chip {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  /* Second row: Pricing plans in a column layout */
+  .content-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the pricing plans in the column */
+    gap: 20px; /* Space between the pricing plans */
+    width: 100%;
+  }
+  
+  .box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 300px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
