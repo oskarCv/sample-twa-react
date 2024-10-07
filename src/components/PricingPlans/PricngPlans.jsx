@@ -112,6 +112,8 @@ const PricingPlans = () => {
                   description={[`Gives you full access for ${plan.months} months`]}
                   discount={plan.discount}
                   buttonText={'Subscribe Now'}
+                  tonPrice={tonPrice}
+                  tcatPrice={tcatPrice}
                 />
               ))}
             </div>}

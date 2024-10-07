@@ -3,15 +3,23 @@ import PropTypes from 'prop-types';
 import IconRadioButton from './IconRadioButton';
 import tonIconLight from '../../assets/ton-ico.png';
 import tcatIcon from '../../assets/tcat-ico.png';
+import { COINS_CONSTANTS } from '../../constants';
 
-const PricingPlan = ({ planType, price, detail, iconSrc, description, discount, buttonText }) => {
-  const [selectedCoin, setSelectedCoin] = useState('TON');
+const PricingPlan = ({ planType, price, detail, iconSrc, description, discount, buttonText, tonPrice, tcatPrice }) => {
+  const [selectedCoin, setSelectedCoin] = useState(COINS_CONSTANTS.TON); // Default TON selected
 
   const onCoinChangeHandler = (coin) => {
     setSelectedCoin(coin);
   };
 
+  // Calculate discounted price if applicable
   const discountedPrice = (price - (discount / 100 * price)).toFixed(2);
+  const finalPrice = discount > 0 ? discountedPrice : price;
+
+  // Ensure the correct calculation happens when state changes
+  const equivalentCoinPrice = selectedCoin === COINS_CONSTANTS.TON 
+    ? (finalPrice / tonPrice).toFixed(4) 
+    : (finalPrice / tcatPrice).toFixed(4);
 
   return (
     <div className={`${planType.toLowerCase()} box`}>
@@ -32,7 +40,7 @@ const PricingPlan = ({ planType, price, detail, iconSrc, description, discount, 
             </div>
           )}
           <div className="new-price-section">
-            <div className="new-price">${discount > 0 ? discountedPrice : price}</div>
+            <div className="new-price">${finalPrice}</div>
             <div className="per-month">per month</div>
           </div>
         </div>
@@ -42,12 +50,19 @@ const PricingPlan = ({ planType, price, detail, iconSrc, description, discount, 
       <div className="coin-selection">
         <IconRadioButton
           options={[
-            { label: 'TON', value: 'TON', icon: tonIconLight },
-            { label: 'TCAT', value: 'TCAT', icon: tcatIcon },
+            { label: 'TON', value: COINS_CONSTANTS.TON, icon: tonIconLight },
+            { label: 'TCAT', value: COINS_CONSTANTS.TCAT, icon: tcatIcon },
           ]}
           selectedCoin={selectedCoin}
           onChange={onCoinChangeHandler}
         />
+      </div>
+
+      {/* Display the equivalent price in the selected coin */}
+      <div className="equivalence-coin-price">
+        <p>
+          {selectedCoin}: <strong>{equivalentCoinPrice} {selectedCoin}</strong>
+        </p>
       </div>
 
       {/* Plan Description */}
@@ -69,12 +84,14 @@ const PricingPlan = ({ planType, price, detail, iconSrc, description, discount, 
 
 PricingPlan.propTypes = {
   planType: PropTypes.string.isRequired,
-  price: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired, // Ensure price is a number
   detail: PropTypes.string.isRequired,
   iconSrc: PropTypes.string.isRequired,
   description: PropTypes.arrayOf(PropTypes.string).isRequired,
   discount: PropTypes.number, // Discount can be null/optional
   buttonText: PropTypes.string.isRequired,
+  tonPrice: PropTypes.number.isRequired, // Ensure tonPrice is a number
+  tcatPrice: PropTypes.number.isRequired, // Ensure tcatPrice is a number
 };
 
 export default PricingPlan;
