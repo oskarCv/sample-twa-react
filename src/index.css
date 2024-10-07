@@ -17,6 +17,7 @@
     --dark-gray: #7D7C7C;
     --black: #000;
     --dark-blue: rgba(30,35,55,1);
+    --ton-blue:rgba(45,131,236,1);
     --primary: var(--bright-orange); /* Define primary color */
     --primary-dark: #FF5733; /* Define a darker shade for hover */
 }
@@ -237,7 +238,18 @@ button:hover {
 .button button:hover {
     background-color: var(--primary-dark);
 }
+.equivalence-coin-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.equivalence-coin-ton{
+    color: var(--ton-blue);
+}
+.equivalence-coin-tcat{
+    color: rebeccapurple
+}
 
-.equivalence-coin-price{
-    color: rebeccapurple;
+.coin-icon{
+    width: 30px;
 }

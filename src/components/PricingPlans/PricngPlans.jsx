@@ -107,6 +107,7 @@ const PricingPlans = () => {
                   key={index}
                   planType={plan.plan_name}
                   price={plan.price}
+                  months={plan.months}
                   detail={plan.months === 1 ? 'per month' : `per ${plan.months} months` }
                   iconSrc={plansCovers[index]}
                   description={[`Gives you full access for ${plan.months} months`]}

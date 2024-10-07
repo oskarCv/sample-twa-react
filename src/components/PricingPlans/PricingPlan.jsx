@@ -5,7 +5,7 @@ import tonIconLight from '../../assets/ton-ico.png';
 import tcatIcon from '../../assets/tcat-ico.png';
 import { COINS_CONSTANTS } from '../../constants';
 
-const PricingPlan = ({ planType, price, detail, iconSrc, description, discount, buttonText, tonPrice, tcatPrice }) => {
+const PricingPlan = ({ planType, price,months, detail, iconSrc, description, discount, buttonText, tonPrice, tcatPrice }) => {
   const [selectedCoin, setSelectedCoin] = useState(COINS_CONSTANTS.TON); // Default TON selected
 
   const onCoinChangeHandler = (coin) => {
@@ -41,7 +41,7 @@ const PricingPlan = ({ planType, price, detail, iconSrc, description, discount, 
           )}
           <div className="new-price-section">
             <div className="new-price">${finalPrice}</div>
-            <div className="per-month">per month</div>
+            <div className="per-month">{`${months === 1 ? 'per month' : `${months} months`}`}</div>
           </div>
         </div>
       </div>
@@ -59,10 +59,13 @@ const PricingPlan = ({ planType, price, detail, iconSrc, description, discount, 
       </div>
 
       {/* Display the equivalent price in the selected coin */}
-      <div className="equivalence-coin-price">
-        <p>
-          {selectedCoin}: <strong>{equivalentCoinPrice} {selectedCoin}</strong>
-        </p>
+      <div className='equivalence-coin-container'>
+        {selectedCoin === COINS_CONSTANTS.TON ? (
+          <img src={tonIconLight} alt="TON" className="coin-icon" />
+        ) : (
+          <img src={tcatIcon} alt="TCAT" className="coin-icon" />
+        )}
+        <strong className={`${selectedCoin === COINS_CONSTANTS.TON ? 'equivalence-coin-ton' : 'equivalence-coin-tcat'}`}>{equivalentCoinPrice}</strong>
       </div>
 
       {/* Plan Description */}
