@@ -185,6 +185,7 @@ button:hover {
 /* New price section */
 .new-price-section {
     text-align: right;
+    padding-right: 1em;
 }
 
 /* New price */
