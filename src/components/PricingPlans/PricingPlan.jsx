@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { TonConnectUI, useTonConnectUI } from "@tonconnect/ui-react";
+import { useTonConnect } from '../../hooks/useTonConnect';
+import {getAllWalletTransactions, getTransactionDetails} from '../../apis/api';
+import { convertUTime } from '../../utils/timeHelpers';
 import PropTypes from 'prop-types';
 import IconRadioButton from './IconRadioButton';
 import tonIconLight from '../../assets/ton-ico.png';
@@ -6,7 +10,13 @@ import tcatIcon from '../../assets/tcat-ico.png';
 import { COINS_CONSTANTS } from '../../constants';
 
 const PricingPlan = ({ planType, price,months, detail, iconSrc, description, discount, buttonText, tonPrice, tcatPrice }) => {
+  const [tonConnectUI] = useTonConnectUI();
   const [selectedCoin, setSelectedCoin] = useState(COINS_CONSTANTS.TON); // Default TON selected
+  const { wallet, sender } = useTonConnect();
+
+  const dollar = 10000000;
+  // const playAmount = 0.001;
+  console.log('Wallet connected: -> ', wallet);
 
   const onCoinChangeHandler = (coin) => {
     setSelectedCoin(coin);
@@ -20,6 +30,74 @@ const PricingPlan = ({ planType, price,months, detail, iconSrc, description, dis
   const equivalentCoinPrice = selectedCoin === COINS_CONSTANTS.TON 
     ? (finalPrice / tonPrice).toFixed(4) 
     : (finalPrice / tcatPrice).toFixed(4);
+
+    const transaction = {
+      // this should be dolar * equivalent coin price
+      messages: [{
+          address: "UQB5diORt6LZ8WT7ZkfigqWUtfWJ1yJTR3TvTG-wXhesveu6",
+          amount: dollar
+      }]
+  };
+
+  const paySubscription = async () => await tonConnectUI.sendTransaction(transaction);
+
+  const fetchTransactions = async (wallet) => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 30000)); // Delay for 30 seconds
+    
+        const response = await getAllWalletTransactions(wallet);
+        const lastTransactionUtime = response.data.transactions[0].now;
+        const lastTransactionDate = convertUTime(lastTransactionUtime);
+        const lastTransactionTraceId = response.data.transactions[0].trace_id;
+        const lastTransactionHash = response.data.transactions[0].hash;
+    
+        console.log('last transaction Fetched utime:', response.data.transactions[0]);
+        console.log('last transaction Fetched utime:', lastTransactionUtime);
+        console.log('last transaction Fetched date from utime:', lastTransactionDate);
+        console.log('last transaction Fetched trace_id:', lastTransactionTraceId);
+        console.log('last transaction Fetched hash:', lastTransactionHash);
+    
+        // const detailsResponse = await getTransactionDetails(lastTransactionHash);
+        // console.log('Transaction details >>>>', detailsResponse);
+    
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+      }
+  };
+
+  const fetchTransactionDetail = async (transactions) => {
+    try {
+      // Get the hash of the last transaction
+      const lastTransactionHash = transactions.transactions[0].hash;
+  
+      // Fetch transaction details asynchronously
+      const sanitizedTransactionHash = encodeURIComponent(lastTransactionHash);
+      const detailsResponse = await getTransactionDetails(sanitizedTransactionHash);
+      
+      return detailsResponse.data; // Return the transaction details
+    } catch (error) {
+      console.error('Error fetching transaction details:', error);
+    }
+  };
+
+  const subscriptionHandler = async() => {
+    console.log('>>>> Subscription starts !!!!');
+    console.log('amount to transfer >> ', equivalentCoinPrice);
+    const subscribed = await paySubscription(); //fix this to handle other coins, for now is only going to ton
+    console.log('===> ', subscribed);
+
+    if (wallet) {
+      console.log('Calling get Transactions !!!', wallet);
+      const transactions = await fetchTransactions(wallet);
+      console.log('Transaction >>>>> ',transactions);
+
+      const transactionDetails = await fetchTransactionDetail(transactions);
+      console.log('details >>>> ', transactionDetails);
+      // Optionally handle the transactions here, e.g., set in state
+    }
+
+  }
 
   return (
     <div className={`${planType.toLowerCase()} box`}>
@@ -79,7 +157,10 @@ const PricingPlan = ({ planType, price,months, detail, iconSrc, description, dis
 
       {/* Button */}
       <div className="button">
-        <button type="submit">{buttonText}</button>
+        <button type="submit" onClick={() => subscriptionHandler()}>{buttonText}</button>
+      </div>
+      <div>
+        {/* <TransactionDetails walletAddress={wallet}/> */}
       </div>
     </div>
   );

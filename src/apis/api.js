@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { EXTERNALS_ROUTES } from '../routes';
 
+// const BaseURL = process.env.REACT_APP_BASE_URL;
 const BaseUrl = 'http://localhost:3100/api';
 
 export const getCoinPrice = async (coinId) => {
@@ -23,6 +24,24 @@ export const getAllSubscriptions = async() =>{
     return response;
   } catch(e){
     console.error('Error while getting the subscriptions !!!');
+  }
+}
+
+export const getAllWalletTransactions = async(wallet) => {
+  try{
+    const response = await axios.get(`${BaseUrl}/getTransactions/${wallet}`);
+    return response;
+  }catch(e){
+    console.error('Error while getting the wallet transactions !!!'); 
+  }
+}
+
+export const getTransactionDetails = async(transactionHash)=>{
+  try{
+    const response = await axios.get(`${BaseUrl}/getTransactionDetails/${transactionHash}`);
+    return response;
+  }catch(e){
+    console.error('Error while getting the wallet transactions !!!'); 
   }
 }
   

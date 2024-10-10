@@ -1,5 +1,6 @@
-import express from 'express';
+import express, { response } from 'express';
 import mysql from 'mysql2/promise'; // Using promises for cleaner async/await handling
+import axios from 'axios';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { getAllSubscriptions } from './db/querys/ALL_SUBSCRIPTIONS.js';
@@ -51,63 +52,91 @@ app.get('/api/subscriptions/', async (req, res) => {
 });
 
 // Get a specific data item by ID
-app.get('/api/data/:id', async (req, res) => {
-  const id = req.params.id;
-  try {
-    const [results] = await connection.query('SELECT * FROM your_table WHERE id = ?', [id]);
-    if (results.length === 0) {
-      res.status(404).json({ message: 'Data not found' });
-    } else {
-      res.json(results[0]);
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error fetching data' });
-  }
-});
+// app.get('/api/data/:id', async (req, res) => {
+//   const id = req.params.id;
+//   try {
+//     const [results] = await connection.query('SELECT * FROM your_table WHERE id = ?', [id]);
+//     if (results.length === 0) {
+//       res.status(404).json({ message: 'Data not found' });
+//     } else {
+//       res.json(results[0]);
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Error fetching data' });
+//   }
+// });
 
 // Create a new data item
-app.post('/api/data', async (req, res) => {
-  const data = req.body;
-  try {
-    await connection.query('INSERT INTO your_table SET ?', data);
-    res.status(201).json({ message: 'Data created successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error creating data' });
-  }
-});
+// app.post('/api/data', async (req, res) => {
+//   const data = req.body;
+//   try {
+//     await connection.query('INSERT INTO your_table SET ?', data);
+//     res.status(201).json({ message: 'Data created successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Error creating data' });
+//   }
+// });
 
 // Update an existing data item
-app.put('/api/data/:id', async (req, res) => {
-  const id = req.params.id;
-  const data = req.body;
+// app.put('/api/data/:id', async (req, res) => {
+//   const id = req.params.id;
+//   const data = req.body;
+//   try {
+//     const [results] = await connection.query('UPDATE your_table SET ? WHERE id = ?', [data, id]);
+//     if (results.affectedRows === 0) {
+//       res.status(404).json({ message: 'Data not found' });
+//     } else {
+//       res.json({ message: 'Data updated successfully' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Error updating data' });
+//   }
+// });
+
+// Delete an existing data item
+// app.delete('/api/data/:id', async (req, res) => {
+//   const id = req.params.id;
+//   try {
+//     const [results] = await connection.query('DELETE FROM your_table WHERE id = ?', [id]);
+//     if (results.affectedRows === 0) {
+//       res.status(404).json({ message: 'Data not found' });
+//     } else {
+//       res.json({ message: 'Data deleted successfully' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Error deleting data' });
+//   }
+// });
+
+app.get('/api/getTransactions/:wallet', async (req, res) => {
+  const { wallet } = req.params;
+  const url = `https://toncenter.com/api/v3/transactions?account=${wallet}`;
+
   try {
-    const [results] = await connection.query('UPDATE your_table SET ? WHERE id = ?', [data, id]);
-    if (results.affectedRows === 0) {
-      res.status(404).json({ message: 'Data not found' });
-    } else {
-      res.json({ message: 'Data updated successfully' });
-    }
+    const response = await axios.get(url);
+    console.log('Transactions: ', response.data);
+    res.json(response.data); // Return the transactions data directly
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error updating data' });
+    console.error('Error fetching transactions:', error.message);
+    res.status(500).json({ message: 'Error fetching transactions' });
   }
 });
 
-// Delete an existing data item
-app.delete('/api/data/:id', async (req, res) => {
-  const id = req.params.id;
+app.get('/api/getTransactionDetails/:transactionHash', async (req, res) => {
+  const { transactionHash } = req.params;
+  const url = `https://tonapi.io/v2/traces/${transactionHash}`;
+
   try {
-    const [results] = await connection.query('DELETE FROM your_table WHERE id = ?', [id]);
-    if (results.affectedRows === 0) {
-      res.status(404).json({ message: 'Data not found' });
-    } else {
-      res.json({ message: 'Data deleted successfully' });
-    }
+    const response = await axios.get(url);
+    console.log(response.data);
+    res.json(response.data); // Return the transactions data directly
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error deleting data' });
+    console.error('Error fetching transactions:', error.message);
+    res.status(500).json({ message: 'Error fetching transactions' });
   }
 });
 
