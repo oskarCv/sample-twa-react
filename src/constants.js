@@ -4,5 +4,11 @@ export const CONSTANTS_PROPERTIES = {
 
 export const COINS_CONSTANTS={
     TON: 'the-open-network',
-    TONCAT: 'ton-cat'
+    T_CAT: 'ton-cat'
+}
+
+export const SUBSCRIPTION_PLANS = {
+    MONTHS_3: 10,
+    MONTHS_6: 60,
+    MONTHS_12: 120,
 }

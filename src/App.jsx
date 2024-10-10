@@ -13,7 +13,7 @@ import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 
 function App() {
-  const { network, wallet } = useTonConnect(); // Get the wallet from the hook
+  const { network, wallet, walletInstance } = useTonConnect(); // Get the wallet from the hook
   const [isConnected, setIsConnected] = useState(false);
 
   // Log the wallet address and set connection status
@@ -60,7 +60,7 @@ function App() {
               {isConnected ? (
                 <Route
                   path="/subscription"
-                  element={<Subscription isConnected={isConnected} />}
+                  element={<Subscription isConnected={isConnected} wallet={walletInstance}/>}
                 />
               ) : (
                 <Route

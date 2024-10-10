@@ -5,10 +5,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
-export default function PaymentCoins({ paimentCoinHandler }) {
+export default function PaymentCoins({ paymentCoinHandler }) {
     const handleChange = (event) => {
-        console.log('Change event: ', event.target.value);
-        subscriptionPlanHandler(event.target.value);
+        paymentCoinHandler(event.target.value);
     };
 
     return (
@@ -19,10 +18,10 @@ export default function PaymentCoins({ paimentCoinHandler }) {
                 aria-labelledby="payment coin"
                 name="payment-coins-group"
                 onChange={handleChange}
-                defaultValue='ton'
+                defaultValue='TON'
             >
-                <FormControlLabel value="ton" control={<Radio />} label="TON" />
-                <FormControlLabel value="tcat" control={<Radio />} label="TCAT" />
+                <FormControlLabel value="TON" control={<Radio />} label="TON" />
+                <FormControlLabel value="T_CAT" control={<Radio />} label="T-CAT" />
                 {/* <FormControlLabel value="12_months" control={<Radio />} label="12 Months" /> */}
             </RadioGroup>
         </FormControl>

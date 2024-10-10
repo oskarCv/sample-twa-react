@@ -5,26 +5,36 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
-export default function SubscriptionOptions({ subscriptionPlanHandler }) {
+export default function SubscriptionOptions({ subscriptionPlanHandler, subscriptionData }) {
     const handleChange = (event) => {
-        console.log('Change event: ', event.target.value);
-        subscriptionPlanHandler(event.target.value);
+        // Find the selected object based on the value
+        const selectedPlan = subscriptionData.find(
+            (item) => JSON.stringify(item) === event.target.value
+        );
+        subscriptionPlanHandler(selectedPlan); // Pass the full object
     };
 
     return (
-        <FormControl>
-            <FormLabel id="subscription_options">Select the plan for you</FormLabel>
-            <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-                onChange={handleChange}
-                defaultValue='3_months'
-            >
-                <FormControlLabel value="3_months" control={<Radio />} label="3 Months" />
-                <FormControlLabel value="6_months" control={<Radio />} label="6 Months" />
-                <FormControlLabel value="12_months" control={<Radio />} label="12 Months" />
-            </RadioGroup>
-        </FormControl>
+        subscriptionData ? (
+            <FormControl>
+                <FormLabel id="subscription_options">Select the plan for you</FormLabel>
+                <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    onChange={handleChange}
+                    defaultValue={JSON.stringify(subscriptionData[0])} // default to the first full object
+                >
+                    {subscriptionData.map((subscriptionItem) => (
+                        <FormControlLabel
+                            key={subscriptionItem.months}
+                            value={JSON.stringify(subscriptionItem)} // Use the full object as the value
+                            control={<Radio />}
+                            label={`${subscriptionItem.months} Months`}
+                        />
+                    ))}
+                </RadioGroup>
+            </FormControl>
+        ) : null
     );
 }

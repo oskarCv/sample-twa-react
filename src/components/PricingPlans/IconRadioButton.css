@@ -1,0 +1,38 @@
+.icon-radio-group {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+  }
+  
+  .icon-radio-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, border 0.3s ease;
+  }
+  
+  .icon-radio-button img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .icon-radio-button p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .icon-radio-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .icon-radio-button.selected {
+    background-color: rgba(0, 123, 255, 0.2); /* Highlight the selected option */
+    border: 2px solid rgba(0, 123, 255, 0.7); /* Optionally add a border */
+    color: rgba(0, 123, 255, 1); /* Change text color on selection */
+  }
+  

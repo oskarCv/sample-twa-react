@@ -31,5 +31,6 @@ export function useTonConnect() {
     // wallet: wallet?.account.address ? base58Encode(wallet.account.address) : null,
     wallet: userFriendlyAddress? userFriendlyAddress : null,
     network: network,
+    walletInstance: wallet,
   };
 }
