@@ -51,67 +51,6 @@ app.get('/api/subscriptions/', async (req, res) => {
   }
 });
 
-// Get a specific data item by ID
-// app.get('/api/data/:id', async (req, res) => {
-//   const id = req.params.id;
-//   try {
-//     const [results] = await connection.query('SELECT * FROM your_table WHERE id = ?', [id]);
-//     if (results.length === 0) {
-//       res.status(404).json({ message: 'Data not found' });
-//     } else {
-//       res.json(results[0]);
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Error fetching data' });
-//   }
-// });
-
-// Create a new data item
-// app.post('/api/data', async (req, res) => {
-//   const data = req.body;
-//   try {
-//     await connection.query('INSERT INTO your_table SET ?', data);
-//     res.status(201).json({ message: 'Data created successfully' });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Error creating data' });
-//   }
-// });
-
-// Update an existing data item
-// app.put('/api/data/:id', async (req, res) => {
-//   const id = req.params.id;
-//   const data = req.body;
-//   try {
-//     const [results] = await connection.query('UPDATE your_table SET ? WHERE id = ?', [data, id]);
-//     if (results.affectedRows === 0) {
-//       res.status(404).json({ message: 'Data not found' });
-//     } else {
-//       res.json({ message: 'Data updated successfully' });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Error updating data' });
-//   }
-// });
-
-// Delete an existing data item
-// app.delete('/api/data/:id', async (req, res) => {
-//   const id = req.params.id;
-//   try {
-//     const [results] = await connection.query('DELETE FROM your_table WHERE id = ?', [id]);
-//     if (results.affectedRows === 0) {
-//       res.status(404).json({ message: 'Data not found' });
-//     } else {
-//       res.json({ message: 'Data deleted successfully' });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Error deleting data' });
-//   }
-// });
-
 app.get('/api/getTransactions/:wallet', async (req, res) => {
   const { wallet } = req.params;
   const url = `https://toncenter.com/api/v3/transactions?account=${wallet}`;
