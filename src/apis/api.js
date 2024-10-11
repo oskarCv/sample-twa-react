@@ -44,4 +44,12 @@ export const getTransactionDetails = async(transactionHash)=>{
     console.error('Error while getting the wallet transactions !!!'); 
   }
 }
+
+export const validateTelegramId = async(telegramId) =>{
+  try{
+    const response = await axios.post(`${BaseUrl}/validate-telegram-id/${telegramId}`);
+  }catch(e){
+    console.error('Error while validating telegrem Id !!!');  
+  }
+}
   

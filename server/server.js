@@ -10,6 +10,8 @@ dotenv.config(); // Load environment variables before creating connection
 const app = express();
 const port = process.env.PORT || 3301; // Use environment variable or default port
 
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+
 let connection; // Declare connection variable
 
 // Establish the database connection
@@ -76,6 +78,28 @@ app.get('/api/getTransactionDetails/:transactionHash', async (req, res) => {
   } catch (error) {
     console.error('Error fetching transactions:', error.message);
     res.status(500).json({ message: 'Error fetching transactions' });
+  }
+});
+
+app.post('/api/validate-telegram-id', async (req, res) => {
+  const { telegramId } = req.body;
+
+  try {
+    const response = await axios.get(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getChat`,
+      {
+        params: { chat_id: telegramId },
+      }
+    );
+
+    if (response.data.ok) {
+      res.json({ exists: true, chat: response.data.result });
+    } else {
+      res.json({ exists: false });
+    }
+  } catch (error) {
+    console.error('Error validating Telegram ID:', error.message || error);
+    res.status(500).json({ exists: false });
   }
 });
 
