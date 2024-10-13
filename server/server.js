@@ -4,11 +4,14 @@ import axios from 'axios';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { getAllSubscriptions } from './db/querys/ALL_SUBSCRIPTIONS.js';
+import { registerSubscription } from './db/querys/SUBSCRIPTION.js';
 
 dotenv.config(); // Load environment variables before creating connection
 
 const app = express();
 const port = process.env.PORT || 3301; // Use environment variable or default port
+
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 let connection; // Declare connection variable
 
@@ -51,66 +54,45 @@ app.get('/api/subscriptions/', async (req, res) => {
   }
 });
 
-// Get a specific data item by ID
-// app.get('/api/data/:id', async (req, res) => {
-//   const id = req.params.id;
-//   try {
-//     const [results] = await connection.query('SELECT * FROM your_table WHERE id = ?', [id]);
-//     if (results.length === 0) {
-//       res.status(404).json({ message: 'Data not found' });
-//     } else {
-//       res.json(results[0]);
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Error fetching data' });
-//   }
-// });
+app.post('/api/userSubscription/', async (req, res) => {
+  try {
+      const {
+          wallet_id,
+          telegram_id,
+          subscription_plan_id,
+          subscription_date,
+          subscription_utime,
+          transaction_hash,
+          trace_id
+      } = req.body; // Assuming the values come from the body of the request
 
-// Create a new data item
-// app.post('/api/data', async (req, res) => {
-//   const data = req.body;
-//   try {
-//     await connection.query('INSERT INTO your_table SET ?', data);
-//     res.status(201).json({ message: 'Data created successfully' });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Error creating data' });
-//   }
-// });
+      console.warn('Body req>>> ', req.body);
+      console.warn('>>> ', wallet_id);
+      console.warn('>>> ', telegram_id);
+      console.warn('>>> ', subscription_plan_id);
+      console.warn('>>> ', subscription_date);
+      console.warn('>>> ', subscription_utime);
+      console.warn('>>> ', transaction_hash);
+      console.warn('>>> ', trace_id);
+      // Pass the necessary data to the registerSubscription function
+      const responseData = await registerSubscription(connection, {
+          wallet_id,
+          telegram_id,
+          subscription_plan_id,
+          subscription_date,
+          subscription_utime,
+          transaction_hash,
+          trace_id
+      });
 
-// Update an existing data item
-// app.put('/api/data/:id', async (req, res) => {
-//   const id = req.params.id;
-//   const data = req.body;
-//   try {
-//     const [results] = await connection.query('UPDATE your_table SET ? WHERE id = ?', [data, id]);
-//     if (results.affectedRows === 0) {
-//       res.status(404).json({ message: 'Data not found' });
-//     } else {
-//       res.json({ message: 'Data updated successfully' });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Error updating data' });
-//   }
-// });
-
-// Delete an existing data item
-// app.delete('/api/data/:id', async (req, res) => {
-//   const id = req.params.id;
-//   try {
-//     const [results] = await connection.query('DELETE FROM your_table WHERE id = ?', [id]);
-//     if (results.affectedRows === 0) {
-//       res.status(404).json({ message: 'Data not found' });
-//     } else {
-//       res.json({ message: 'Data deleted successfully' });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Error deleting data' });
-//   }
-// });
+      console.warn('Info gotten');
+      console.log(responseData); // This will now print the results
+      res.json(responseData); // Send the results back to the client
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error fetching data' }); // Handle error here
+  }
+});
 
 app.get('/api/getTransactions/:wallet', async (req, res) => {
   const { wallet } = req.params;
@@ -139,6 +121,30 @@ app.get('/api/getTransactionDetails/:transactionHash', async (req, res) => {
     res.status(500).json({ message: 'Error fetching transactions' });
   }
 });
+
+app.post('/api/validate-telegram-id', async (req, res) => {
+  const { telegramId } = req.body;
+
+  try {
+    const response = await axios.get(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getChat`,
+      {
+        params: { chat_id: telegramId },
+      }
+    );
+
+    if (response.data.ok) {
+      res.json({ exists: true, chat: response.data.result });
+    } else {
+      res.json({ exists: false });
+    }
+  } catch (error) {
+    console.error('Error validating Telegram ID:', error.message || error);
+    res.status(500).json({ exists: false });
+  }
+});
+
+
 
 // Start the server
 app.listen(port, () => {
