@@ -27,6 +27,15 @@ export const getAllSubscriptions = async() =>{
   }
 }
 
+export const postUserSubscription = async(subscriptionInfo) =>{
+  try{
+    const response = await axios.post(`${BaseUrl}/userSubscription`, subscriptionInfo);
+    return response.data;
+  } catch(e){
+    console.error('Error posting the subscription !!!');
+  }
+}
+//TON
 export const getAllWalletTransactions = async(wallet) => {
   try{
     const response = await axios.get(`${BaseUrl}/getTransactions/${wallet}`);

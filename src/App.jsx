@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTonConnect } from "./hooks/useTonConnect";
 import { Grid2 as Grid, Box } from "@mui/material";
+import { ToastContainer } from "react-toastify";
 import {
   BrowserRouter as Router,
   Routes,
@@ -27,7 +28,9 @@ function App() {
   }, [wallet]);
 
   return (
-    <Router>
+    <>
+      <ToastContainer />
+      <Router>
       <Box
         sx={{
           backgroundColor: "#e8e8e8",
@@ -76,6 +79,7 @@ function App() {
         </Grid>
       </Box>
     </Router>
+    </>
   );
 }
 
