@@ -16,32 +16,6 @@ const PricingPlans = () => {
   const [plans, setPlans] = useState([]);
   const [plansCovers, setPlansCovers] = useState(null);
 
-  const plansMock = [
-    {
-      type: 'Basic',
-      cost: '$99999',
-      detail: 'per month',
-      iconSrc: news,
-      description: ['Lorem, ipsum dolor.', 'Harum, beatae laudantium.'],
-      buttonText: 'START FREE 7 DAYS TRIAL',
-    },
-    {
-      type: 'Standard',
-      cost: '$99',
-      detail: 'per 6 Months',
-      iconSrc: moneyTree,
-      description: ['Lorem, ipsum dolor.', 'Harum, beatae laudantium.'],
-      buttonText: 'START FREE 7 DAYS TRIAL',
-    },
-    {
-      type: 'Business',
-      cost: '$199',
-      detail: 'per year',
-      iconSrc: manSuit,
-      description: ['Lorem, ipsum dolor.', 'Harum, beatae laudantium.'],
-      buttonText: 'START FREE 7 DAYS TRIAL',
-    },
-  ];
   // Function to fetch coin prices and update state
   const updateCoinPrices = async () => {
     try {
@@ -115,6 +89,7 @@ const PricingPlans = () => {
                   buttonText={'Subscribe Now'}
                   tonPrice={tonPrice}
                   tcatPrice={tcatPrice}
+                  planId={index}
                 />
               ))}
             </div>}
