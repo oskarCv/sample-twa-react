@@ -4,6 +4,7 @@ import axios from 'axios';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { getAllSubscriptions } from './db/querys/ALL_SUBSCRIPTIONS.js';
+import { registerSubscription } from './db/querys/SUBSCRIPTION.js';
 
 dotenv.config(); // Load environment variables before creating connection
 
@@ -44,6 +45,46 @@ app.use(express.json()); // Parse incoming JSON requests
 app.get('/api/subscriptions/', async (req, res) => {
   try {
       const responseData = await getAllSubscriptions(connection); // Call without res
+      console.warn('Info gotten');
+      console.log(responseData); // This will now print the results
+      res.json(responseData); // Send the results back to the client
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error fetching data' }); // Handle error here
+  }
+});
+
+app.post('/api/userSubscription/', async (req, res) => {
+  try {
+      const {
+          wallet_id,
+          telegram_id,
+          subscription_plan_id,
+          subscription_date,
+          subscription_utime,
+          transaction_hash,
+          trace_id
+      } = req.body; // Assuming the values come from the body of the request
+
+      console.warn('Body req>>> ', req.body);
+      console.warn('>>> ', wallet_id);
+      console.warn('>>> ', telegram_id);
+      console.warn('>>> ', subscription_plan_id);
+      console.warn('>>> ', subscription_date);
+      console.warn('>>> ', subscription_utime);
+      console.warn('>>> ', transaction_hash);
+      console.warn('>>> ', trace_id);
+      // Pass the necessary data to the registerSubscription function
+      const responseData = await registerSubscription(connection, {
+          wallet_id,
+          telegram_id,
+          subscription_plan_id,
+          subscription_date,
+          subscription_utime,
+          transaction_hash,
+          trace_id
+      });
+
       console.warn('Info gotten');
       console.log(responseData); // This will now print the results
       res.json(responseData); // Send the results back to the client
@@ -102,6 +143,8 @@ app.post('/api/validate-telegram-id', async (req, res) => {
     res.status(500).json({ exists: false });
   }
 });
+
+
 
 // Start the server
 app.listen(port, () => {
