@@ -61,4 +61,21 @@ export const validateTelegramId = async(telegramId) =>{
     console.error('Error while validating telegrem Id !!!');  
   }
 }
+
+export const getPlatformUserId = async (walletId) => {
+  try {
+    const response = await axios.get(`${BaseUrl}/getPlatformUserId/${walletId}`);
+    
+    if (response.data.found) {
+      console.log('Platform User ID found:', response.data.platformUserId);
+      return response.data.platformUserId;
+    } else {
+      console.log('Platform User ID not found for this wallet ID');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error while fetching Platform User ID:', error.message || error);
+    throw error;
+  }
+};
   

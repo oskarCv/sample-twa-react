@@ -14,6 +14,7 @@ import tonIconLight from "../../assets/ton-ico.png";
 import tcatIcon from "../../assets/tcat-ico.png";
 import { COINS_CONSTANTS } from "../../constants";
 import TelegramIdModal from "../TelegramIdModal";
+import { useNavigate } from 'react-router-dom';
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -36,10 +37,9 @@ const PricingPlan = ({
   const [isTelegramPromptVisible, setIsTelegramPromptVisible] = useState(false);
   const [manualTelegramId, setManualTelegramId] = useState("");
   const [collectedSubscriptionData, setCollectedSubscriptionData] = useState(null);
-
+  const navigate = useNavigate();
 
   const dollar = 1000000;
-  console.log("Wallet connected: -> ", wallet);
 
   const onCoinChangeHandler = (coin) => {
     setSelectedCoin(coin);
@@ -62,9 +62,26 @@ const PricingPlan = ({
     ],
   };
 
-  const paySubscription = async () =>
-    await tonConnectUI.sendTransaction(transaction);
+  const jettonTransaction = {
+    messages: [
+      {
+        address: "UQB5diORt6LZ8WT7ZkfigqWUtfWJ1yJTR3TvTG-wXhesveu6",
+        amount: dollar,
+        jetton:'EQBtDmYgCKk3ecQ1x-j0CLZRnPYyaV7cB33ad036QN-HE2C7',
+      },
+    ],
+  };
 
+  const paySubscription = async (coin) => {
+    const paymentDefinition = coin === COINS_CONSTANTS.TON ? transaction : jettonTransaction;
+    try {
+      await tonConnectUI.sendTransaction(paymentDefinition);
+      console.log('Transaction sent successfully');
+    } catch (error) {
+      console.error('Transaction failed:', error);
+    }
+  }
+  
   const fetchTransactions = async (wallet) => {
     try {
       toast.info('Validating transaction :)', { autoClose: 5000 });
@@ -99,7 +116,7 @@ const PricingPlan = ({
   const subscriptionHandler = async () => {
     if (wallet) {
       // Step 1: Collect wallet and transaction data first
-      const subscribed = await paySubscription();
+      const subscribed = await paySubscription(selectedCoin);
       const transactions = await fetchTransactions(wallet);
       const transactionDetails = await fetchTransactionDetail(transactions);
   
@@ -139,7 +156,6 @@ const PricingPlan = ({
 
   useEffect(() => {
     if (!isTelegramPromptVisible && manualTelegramId.trim()) {
-      // When the modal closes and the manualTelegramId is provided, resume the subscription
       // Use the previously collected data
       const subscriptionData = {
         ...collectedSubscriptionData,
@@ -154,9 +170,14 @@ const PricingPlan = ({
   const finalizeSubscription = async (subscriptionData) => {
     // Process the subscription data (e.g., send to backend)
     console.log("Final subscription data:", subscriptionData);
-    await postUserSubscription(subscriptionData);
+    try{
+      await postUserSubscription(subscriptionData);
+      navigate('/validate-subscription');
+    } catch (e){
+      toast.error('Error: reach out to customer service');
+    }
     // Perform further actions like API submission
-    // Example: await sendSubscriptionToBackend(subscriptionData);
+    
   };
   
 
@@ -189,10 +210,10 @@ const PricingPlan = ({
           <IconRadioButton
             options={[
               { label: "TON", value: COINS_CONSTANTS.TON, icon: tonIconLight },
-              { label: "TCAT", value: COINS_CONSTANTS.TCAT, icon: tcatIcon },
+              { label: "TCAT", value: COINS_CONSTANTS.T_CAT, icon: tcatIcon },
             ]}
             selectedCoin={selectedCoin}
-            onChange={onCoinChangeHandler}
+            onCoinChangeHandler={onCoinChangeHandler}
           />
         </div>
         <div className="equivalence-coin-container">
@@ -223,6 +244,7 @@ const PricingPlan = ({
             {buttonText}
           </button>
         </div>
+        <jettonSample />
       </div>
 
       <TelegramIdModal
