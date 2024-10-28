@@ -5,6 +5,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { getAllSubscriptions } from './db/querys/ALL_SUBSCRIPTIONS.js';
 import { registerSubscription } from './db/querys/SUBSCRIPTION.js';
+import { platformUserId } from './db/querys/PLATFORM_USER_ID.js';
+
 
 dotenv.config(); // Load environment variables before creating connection
 
@@ -64,7 +66,7 @@ app.post('/api/userSubscription/', async (req, res) => {
           subscription_utime,
           transaction_hash,
           trace_id
-      } = req.body; // Assuming the values come from the body of the request
+      } = req.body;
 
       console.warn('Body req>>> ', req.body);
       console.warn('>>> ', wallet_id);
@@ -74,7 +76,7 @@ app.post('/api/userSubscription/', async (req, res) => {
       console.warn('>>> ', subscription_utime);
       console.warn('>>> ', transaction_hash);
       console.warn('>>> ', trace_id);
-      // Pass the necessary data to the registerSubscription function
+      
       const responseData = await registerSubscription(connection, {
           wallet_id,
           telegram_id,
@@ -141,6 +143,23 @@ app.post('/api/validate-telegram-id', async (req, res) => {
   } catch (error) {
     console.error('Error validating Telegram ID:', error.message || error);
     res.status(500).json({ exists: false });
+  }
+});
+app.get('/api/getPlatformUserId/:walletId', async (req, res) => {
+  const { walletId } = req.params;
+
+  try {
+    const [results] = await connection.query(`CALL GetPlatformUserId(?, @platformUserId, @found);`, [walletId]);
+    const [[{ platformUserId, found }]] = await connection.query(`SELECT @platformUserId AS platformUserId, @found AS found;`);
+
+    if (found) {
+      res.json({ platformUserId, found: true });
+    } else {
+      res.json({ platformUserId: null, found: false });
+    }
+  } catch (error) {
+    console.error('Error fetching Platform User ID:', error.message || error);
+    res.status(500).json({ message: 'Error fetching Platform User ID' });
   }
 });
 
