@@ -17,6 +17,11 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 let connection; // Declare connection variable
 
+const cors = require('cors');
+app.use(cors({
+  origin: 'http://54.177.124.123>', // Replace with your actual front-end URL or '*'
+}));
+
 // Establish the database connection
 async function initializeDBConnection() {
   try {
@@ -30,7 +35,7 @@ async function initializeDBConnection() {
     console.log('Connected to the database successfully!');
   } catch (error) {
     console.error('Error connecting to the database:', error);
-    process.exit(1); // Exit the process with an error
+    process.exit(1);
   }
 }
 
@@ -39,20 +44,20 @@ initializeDBConnection();
 
 // Enable CORS for cross-origin requests (if necessary)
 app.use(cors());
-app.use(express.json()); // Parse incoming JSON requests
+app.use(express.json());
 
 // Define API endpoints
 
 // Get all subscriptions
 app.get('/api/subscriptions/', async (req, res) => {
   try {
-      const responseData = await getAllSubscriptions(connection); // Call without res
+      const responseData = await getAllSubscriptions(connection);
       console.warn('Info gotten');
-      console.log(responseData); // This will now print the results
-      res.json(responseData); // Send the results back to the client
+      console.log(responseData);
+      res.json(responseData);
   } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Error fetching data' }); // Handle error here
+      res.status(500).json({ message: 'Error fetching data' });
   }
 });
 
@@ -88,8 +93,8 @@ app.post('/api/userSubscription/', async (req, res) => {
       });
 
       console.warn('Info gotten');
-      console.log(responseData); // This will now print the results
-      res.json(responseData); // Send the results back to the client
+      console.log(responseData);
+      res.json(responseData);
   } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Error fetching data' }); // Handle error here
@@ -117,7 +122,7 @@ app.get('/api/getTransactionDetails/:transactionHash', async (req, res) => {
   try {
     const response = await axios.get(url);
     console.log(response.data);
-    res.json(response.data); // Return the transactions data directly
+    res.json(response.data);
   } catch (error) {
     console.error('Error fetching transactions:', error.message);
     res.status(500).json({ message: 'Error fetching transactions' });
