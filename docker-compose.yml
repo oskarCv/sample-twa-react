@@ -2,20 +2,20 @@ version: '3'
 services:
   node-api:
     build:
-      context: .  # Root directory
-      dockerfile: Dockerfile.server  # Path to the server Dockerfile
+      context: .  # Build context set to root directory
+      dockerfile: Dockerfile.server  # Correct reference to the Dockerfile
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
     volumes:
-      - ./server:/usr/src/app  # To enable easy development
+      - ./server:/usr/src/app  # To enable development changes
 
   react-app:
     build:
-      context: .  # Root directory
-      dockerfile: Dockerfile.react  # Path to the React Dockerfile
+      context: .  # Same root context
+      dockerfile: Dockerfile.react
     ports:
       - "80:80"
     depends_on:
-      - node-api  # Ensure the API is started before the React app
+      - node-api  # API starts first
