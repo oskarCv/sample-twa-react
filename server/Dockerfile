@@ -4,17 +4,17 @@ FROM node:14
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json
-COPY server/package*.json ./
+# Copy package.json and package-lock.json from the root
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy Node API source code
+# Copy Node API source code from the server directory
 COPY server/ .
 
 # Expose the port your API runs on
 EXPOSE 3000
 
 # Start the application
-CMD ["node", "server.js"]  # Replace server.js with your entry file
+CMD ["node", "server.js"]  # Replace with your entry file if different
