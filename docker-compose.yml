@@ -2,20 +2,20 @@ version: '3'
 services:
   node-api:
     build:
-      context: ./server  # Build context for the Node.js API
-      dockerfile: Dockerfile  # Use the Dockerfile located in the server directory
+      context: .  # Root directory
+      dockerfile: Dockerfile.server  # Path to the server Dockerfile
     ports:
-      - "3000:3000"  # Map host port 3000 to container port 3000
+      - "3000:3000"
     environment:
-      - NODE_ENV=production  # Example environment variable
+      - NODE_ENV=production
     volumes:
-      - ./server:/usr/src/app  # Optional: Mount the server directory for hot reloading during development
+      - ./server:/usr/src/app  # To enable easy development
 
   react-app:
     build:
-      context: .  # Build context for the Vite React app
-      dockerfile: Dockerfile.react  # Use the Dockerfile for Vite located in the root
+      context: .  # Root directory
+      dockerfile: Dockerfile.react  # Path to the React Dockerfile
     ports:
-      - "80:80"  # Map host port 80 to container port 80
+      - "80:80"
     depends_on:
       - node-api  # Ensure the API is started before the React app
