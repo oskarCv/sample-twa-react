@@ -1,23 +1,20 @@
 #xROM node:18 as build
 FROM node:18-alpine AS build
 
-# Install pnpm globally
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
 # Set working directory
 WORKDIR /app
 
-# Copy only package.json and pnpm-lock.yaml for dependency installation
-COPY package.json pnpm-lock.yaml ./
+# Copy package.json and package-lock.json first to leverage Docker cache
+COPY package*.json ./
 
-# Install dependencies using pnpm
-RUN pnpm install --frozen-lockfile
+# Install dependencies
+RUN npm install
 
 # Copy the rest of the application source code
 COPY . .
 
 # Build the Vite application (output goes to /app/dist by default)
-RUN pnpm run build
+RUN npm run build
 
 # Step 2: Use Nginx to serve the build output
 FROM nginx:alpine
@@ -30,4 +27,4 @@ EXPOSE 80
 
 # Health check to ensure Nginx is running
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s \
-  CMD wget -q --spider http://localhost/ || exit 1
+  CMD curl -f http://localhost/ || exit 1
