@@ -3,7 +3,7 @@ import axios from 'axios';
 import { EXTERNALS_ROUTES } from '../routes';
 
 // const BaseURL = process.env.REACT_APP_BASE_URL;
-const BaseUrl = 'http://ec2-13-57-32-46.us-west-1.compute.amazonaws.com:3100/api';
+const BaseUrl = 'http://ec2-54-176-251-138.us-west-1.compute.amazonaws.com:3100/api';
 
 export const getCoinPrice = async (coinId) => {
   try {
