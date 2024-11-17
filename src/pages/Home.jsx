@@ -1,21 +1,23 @@
-// Home.jsx
 import React from "react";
+import backgroundImage from "../assets/front_page.jpeg";
 
-const Home = ({isConnected}) => {
+const Home = ({ isConnected }) => {
   return (
-   <div>
-        <h2>Here we can add some content like</h2>
-        {
-            isConnected
-            ? (
-                <div>
-                    <span>What do we want to show incas is logged</span>
-                </div>
-            )
-            :''
-        }
-   </div> 
-  )
+    <div>
+      <section
+        className="frontpage"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          height: "100vh",
+          width: "100vw"
+        }}
+      ></section>
+
+      {isConnected && <div>Connected !!!</div>}
+    </div>
+  );
 };
 
 export default Home;

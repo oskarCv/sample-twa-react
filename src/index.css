@@ -6,7 +6,10 @@
     padding: 0;
     font-family: "Poppins", sans-serif;
 }
-
+body{
+   padding: 0;
+   margin: 0; 
+}
 :root {
     --pinkish-red: #C35A74;
     --medium-blue: #307BAA;
