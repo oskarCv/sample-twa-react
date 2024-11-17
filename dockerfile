@@ -55,7 +55,7 @@ FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 
 # Copy the custom Nginx configuration file (with SSL enabled)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy SSL certificates to the container (make sure they are added to your project)
 COPY ./ssl/vip.tokencompass.info.crt /etc/ssl/certs/vip.tokencompass.info.crt
