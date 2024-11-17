@@ -58,9 +58,9 @@ COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy SSL certificates to the container (make sure they are added to your project)
-COPY ../../ssl/vip.tokencompass.info.crt /etc/ssl/certs/vip.tokencompass.info.crt
-COPY ../../ssl/vip.tokencompass.info.key /etc/ssl/private/vip.tokencompass.info.key
-COPY ../../ssl/ca_vip.tokencompass.info.crt /etc/ssl/certs/ca_vip.tokencompass.info.crt
+COPY ./ssl/vip.tokencompass.info.crt /etc/ssl/certs/vip.tokencompass.info.crt
+COPY ./ssl/vip.tokencompass.info.key /etc/ssl/private/vip.tokencompass.info.key
+COPY ./ssl/ca_vip.tokencompass.info.crt /etc/ssl/certs/ca_vip.tokencompass.info.crt
 
 # Expose HTTP (80) and HTTPS (443) ports
 EXPOSE 80
