@@ -2,8 +2,6 @@
 import axios from 'axios';
 import { EXTERNALS_ROUTES } from '../routes';
 
-// const BaseURL = process.env.REACT_APP_BASE_URL;
-// const BaseUrl = 'https://ec2-54-176-251-138.us-west-1.compute.amazonaws.com:3100/api';
 const BaseUrl ='https://api.tokencompass.info/api';
 
 export const getCoinPrice = async (coinId) => {
