@@ -133,8 +133,33 @@ button:hover {
     justify-content: space-around;
     width: 100%;
     padding: 30px 0 20px;
-    background: linear-gradient(90deg, rgba(45,131,236,1) 0%, rgba(26,201,255,1) 100%);
 }
+.entry-cover{
+    background: 
+        linear-gradient(90deg, rgba(45,131,236,1) 0%, rgba(26,201,255,1) 100%), 
+        url('./assets/entry.jpeg');
+        background-size: cover; /* Ensures the image covers the entire area */
+        background-position: center; /* Centers the image */
+        background-blend-mode: overlay; /* Blends the gradient with the image */
+}
+.advance-cover{
+    background: 
+        linear-gradient(90deg, rgba(45,131,236,1) 0%, rgba(26,201,255,1) 100%), 
+        url('./assets/advance.jpeg');
+        background-size: cover; /* Ensures the image covers the entire area */
+        background-position: center; /* Centers the image */
+        background-blend-mode: overlay; /* Blends the gradient with the image */
+
+}
+.pro-cover{
+    background: 
+        linear-gradient(90deg, rgba(45,131,236,1) 0%, rgba(26,201,255,1) 100%), 
+        url('./assets/pro.jpeg');
+        background-size: cover; /* Ensures the image covers the entire area */
+        background-position: center; /* Centers the image */
+        background-blend-mode: overlay; /* Blends the gradient with the image */
+}
+
 
 .icon {
     display: flex;
@@ -148,12 +173,12 @@ button:hover {
 
 /* Cost and pricing section */
 .cost {
+    height: 8em;
     flex-basis: 75%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* flex-direction: row; */
-    margin-top: 10px;
+    margin-left: 4em;
 }
 
 /* Original price */

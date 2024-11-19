@@ -185,11 +185,8 @@ const PricingPlan = ({
     <>
       <div className={`${planType.toLowerCase()} box`}>
         <h2 className="title">{planType}</h2>
-        <div className="view">
-          <div className="icon">
-            <img src={iconSrc} alt={`${planType} icon`} />
-          </div>
-
+        <div className={`view ${iconSrc}-cover`}>
+          {console.log('<ocv> icosrc ', iconSrc)}
           <div className="cost">
             {discount > 0 && (
               <div className="discount-section">
@@ -199,9 +196,6 @@ const PricingPlan = ({
             )}
             <div className="new-price-section">
               <div className="new-price">${finalPrice}</div>
-              <div className="per-month">
-                {months === 1 ? "per month" : `${months} months`}
-              </div>
             </div>
           </div>
         </div>

@@ -41,7 +41,7 @@ const PricingPlans = () => {
   useEffect(() => {
     updateCoinPrices();
     updateSubscriptionPlans();
-    setPlansCovers([entry, moneyTree, manSuit]);
+    setPlansCovers(['entry', 'advance', 'pro']);
     const intervalId = setInterval(() => {
       updateCoinPrices();
     }, 180000); // 3 minutes
