@@ -67,9 +67,10 @@ const VerifySubscription = ({ isConnected, wallet }) => {
               style={{
                 margin: "5px",
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
                 alignItems: "flex-start",
                 gap: "10px",
+                justifyContent:'space-evenly'
               }}
             >
               <a
