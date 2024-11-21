@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import './VerifySubscription.css';
+import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import "./VerifySubscription.css";
 import { getPlatformUserId } from "../apis/api";
 
 const StyledButton = styled(Button)({
-  margin: '0.5rem',
+  margin: "0.5rem",
 });
 
 const VerifySubscription = ({ isConnected, wallet }) => {
@@ -17,29 +17,34 @@ const VerifySubscription = ({ isConnected, wallet }) => {
     return <span>You are not connected.</span>;
   }
 
-  const validateRegister = async() => {
-    console.log('Validate by wallet: ', wallet);
-    try{
+  const validateRegister = async () => {
+    console.log("Validate by wallet: ", wallet);
+    try {
       const response = await getPlatformUserId(wallet);
-      if (response &&  response != ''){
+      if (response && response != "") {
         setShouldDisplayLinks(true);
       }
       console.log(response);
-    } catch (e){
-      console.error("There was an error calling validating the registration !!!");
+    } catch (e) {
+      console.error(
+        "There was an error calling validating the registration !!!"
+      );
     }
-
-  }
+  };
 
   return (
     <div className="columns">
       <div className="column main">
         <div className="success-extras">
-          <CheckCircleIcon color="success" style={{ fontSize: '6em', margin: '0 0 30px' }} />
+          <CheckCircleIcon
+            color="success"
+            style={{ fontSize: "6em", margin: "0 0 30px" }}
+          />
           <p>Thanks for your order!</p>
           <p className="success-lrg">Just a few more steps</p>
           <p>
-            For confidentiality, go to the Telegram app and use the bot command <strong>/addme</strong>.
+            For confidentiality, go to the Telegram app and use the bot command{" "}
+            <strong>/addme</strong>.
           </p>
           <div className="actions-toolbar">
             <StyledButton
@@ -54,37 +59,144 @@ const VerifySubscription = ({ isConnected, wallet }) => {
             </StyledButton>
           </div>
           <p>
-            Once the bot says "User and subscription status updated successfully," you can validate here:
+            Once the bot says "User and subscription status updated
+            successfully," you can validate here:
           </p>
-          {shouldDisplayLinks ?
-            <div style={{margin:'5px', display:'flex'}}>
-              <div>
-                <a href="https://t.me/+fpnBaxj7EmY0YWNh" target="_blank" rel="noopener noreferrer">Token Compass Core Scalping</a>
-              </div>
-              <div>
-                <a href="https://t.me/+zltHuFHrS0I1Y2Yx" target="_blank" rel="noopener noreferrer">Token Compass Day Trade Signals </a>
-              </div>
-              <div>
-                <a href="https://t.me/+08chKGd4dkAwNjUx" target="_blank" rel="noopener noreferrer">Token Compass General Signals and Analysis</a>
-              </div>
-              <div>
-                <a href="https://t.me/+YpWDRi6qiHM1ZjYx" target="_blank" rel="noopener noreferrer">Token Compass VIP Lounge</a>
-              </div>
-            </div>
-            : <div style={{margin:'5px'}}>Here will be listed the telegram groups to join once validate</div>
-          }
-          {shouldDisplayLinks ? 
-            <div>
+          {shouldDisplayLinks ? (
+            <div
+              style={{
+                margin: "5px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                gap: "10px",
+              }}
+            >
+              <a
+                href="https://t.me/+fpnBaxj7EmY0YWNh"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  textDecoration: "none",
+                  color: "#007BFF",
+                  fontSize: "16px",
+                  padding: "10px 15px",
+                  border: "1px solid #007BFF",
+                  borderRadius: "5px",
+                  backgroundColor: "#f9f9f9",
+                  display: "inline-block",
+                  transition: "background-color 0.3s, color 0.3s",
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = "#007BFF";
+                  e.target.style.color = "#fff";
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = "#f9f9f9";
+                  e.target.style.color = "#007BFF";
+                }}
+              >
+                Token Compass Core Scalping
+              </a>
 
-            </div> 
-            : <StyledButton
-            variant="contained"
-            color="primary"
-            onClick={validateRegister}
-            aria-label="Validate Subscription"
-          >
-            Validate
-          </StyledButton>}
+              <a
+                href="https://t.me/+zltHuFHrS0I1Y2Yx"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  textDecoration: "none",
+                  color: "#007BFF",
+                  fontSize: "16px",
+                  padding: "10px 15px",
+                  border: "1px solid #007BFF",
+                  borderRadius: "5px",
+                  backgroundColor: "#f9f9f9",
+                  display: "inline-block",
+                  transition: "background-color 0.3s, color 0.3s",
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = "#007BFF";
+                  e.target.style.color = "#fff";
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = "#f9f9f9";
+                  e.target.style.color = "#007BFF";
+                }}
+              >
+                Token Compass Day Trade Signals
+              </a>
+
+              <a
+                href="https://t.me/+08chKGd4dkAwNjUx"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  textDecoration: "none",
+                  color: "#007BFF",
+                  fontSize: "16px",
+                  padding: "10px 15px",
+                  border: "1px solid #007BFF",
+                  borderRadius: "5px",
+                  backgroundColor: "#f9f9f9",
+                  display: "inline-block",
+                  transition: "background-color 0.3s, color 0.3s",
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = "#007BFF";
+                  e.target.style.color = "#fff";
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = "#f9f9f9";
+                  e.target.style.color = "#007BFF";
+                }}
+              >
+                Token Compass General Signals and Analysis
+              </a>
+
+              <a
+                href="https://t.me/+YpWDRi6qiHM1ZjYx"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  textDecoration: "none",
+                  color: "#007BFF",
+                  fontSize: "16px",
+                  padding: "10px 15px",
+                  border: "1px solid #007BFF",
+                  borderRadius: "5px",
+                  backgroundColor: "#f9f9f9",
+                  display: "inline-block",
+                  transition: "background-color 0.3s, color 0.3s",
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = "#007BFF";
+                  e.target.style.color = "#fff";
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = "#f9f9f9";
+                  e.target.style.color = "#007BFF";
+                }}
+              >
+                Token Compass VIP Lounge
+              </a>
+            </div>
+          ) : (
+            <div style={{ margin: "5px" }}>
+              Here will be listed the telegram groups to join once validate
+            </div>
+          )}
+          {shouldDisplayLinks ? (
+            <div></div>
+          ) : (
+            <StyledButton
+              variant="contained"
+              color="primary"
+              onClick={validateRegister}
+              aria-label="Validate Subscription"
+            >
+              Validate
+            </StyledButton>
+          )}
         </div>
       </div>
     </div>
