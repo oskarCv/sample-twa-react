@@ -11,11 +11,23 @@ const Home = ({ isConnected }) => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           height: "100vh",
-          width: "100vw"
+          width: "100vw",
+          position: "relative",
         }}
-      ></section>
-
-      {isConnected && <div>Connected !!!</div>}
+      >
+        <iframe
+          src="https://www.thedigitalassetblueprint.com/token-compass-about-webapp/"
+          title="Token Compass"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            border: "none",
+          }}
+        />
+      </section>
     </div>
   );
 };
