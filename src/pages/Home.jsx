@@ -16,7 +16,7 @@ const Home = ({ isConnected }) => {
         }}
       >
         <iframe
-          src="https://www.thedigitalassetblueprint.com/token-compass-about-webapp/"
+          src="https://www.thedigitalassetblueprint.com/token-compass-home-webapp/"
           title="Token Compass"
           style={{
             position: "absolute",
