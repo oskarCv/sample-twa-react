@@ -26,13 +26,14 @@ const TelegramIdModal = ({ open, handleClose, manualTelegramId, setManualTelegra
       >
         <CardContent>
           <Typography id="telegram-id-modal" variant="h5" sx={{ fontWeight: "bold", marginBottom: "10px" }}>
-            Enter Your Telegram ID
+            Enter Your @Telegram ID
           </Typography>
           <Typography id="enter-telegram-id-description" variant="body1" sx={{ marginBottom: "20px" }}>
-            We noticed you are not comming from Telegram, please provide your Telegram ID so we can grant you the access.
+            We noticed you are not comming from Telegram, please provide your @Telegram ID so we can grant you the access.
+            ** Need to include the "@" symbol.
           </Typography>
           <TextField
-            label="Telegram ID"
+            label="@TelegramID"
             variant="outlined"
             fullWidth
             value={manualTelegramId}

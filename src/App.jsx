@@ -12,6 +12,7 @@ import About from "./pages/About";
 import Subscription from "./pages/Subscription";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
+import VerifySubscription from "./pages/VerifySubscription";
 
 function App() {
   const { network, wallet, walletInstance } = useTonConnect(); // Get the wallet from the hook
@@ -71,6 +72,12 @@ function App() {
                   element={<Navigate to="/" replace />}
                 />
               )}
+              {isConnected ? (
+                <Route
+                  path="/validate-subscription"
+                  element={<VerifySubscription isConnected={isConnected} wallet={wallet}/>}
+                />
+                ):''}
             </Routes>
           </Grid>
 

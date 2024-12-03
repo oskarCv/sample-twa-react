@@ -2,8 +2,7 @@
 import axios from 'axios';
 import { EXTERNALS_ROUTES } from '../routes';
 
-// const BaseURL = process.env.REACT_APP_BASE_URL;
-const BaseUrl = 'http://localhost:3100/api';
+const BaseUrl ='https://api.tokencompass.info/api';
 
 export const getCoinPrice = async (coinId) => {
   try {
@@ -61,4 +60,21 @@ export const validateTelegramId = async(telegramId) =>{
     console.error('Error while validating telegrem Id !!!');  
   }
 }
+
+export const getPlatformUserId = async (walletId) => {
+  try {
+    const response = await axios.get(`${BaseUrl}/getPlatformUserId/${walletId}`);
+    
+    if (response.data.found) {
+      console.log('Platform User ID found:', response.data.platformUserId);
+      return response.data.platformUserId;
+    } else {
+      console.log('Platform User ID not found for this wallet ID');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error while fetching Platform User ID:', error.message || error);
+    throw error;
+  }
+};
   

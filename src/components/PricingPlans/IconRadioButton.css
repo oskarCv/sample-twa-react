@@ -35,4 +35,10 @@
     border: 2px solid rgba(0, 123, 255, 0.7); /* Optionally add a border */
     color: rgba(0, 123, 255, 1); /* Change text color on selection */
   }
+
+  .icon-radio-button.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
   

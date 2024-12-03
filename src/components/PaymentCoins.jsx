@@ -22,7 +22,6 @@ export default function PaymentCoins({ paymentCoinHandler }) {
             >
                 <FormControlLabel value="TON" control={<Radio />} label="TON" />
                 <FormControlLabel value="T_CAT" control={<Radio />} label="T-CAT" />
-                {/* <FormControlLabel value="12_months" control={<Radio />} label="12 Months" /> */}
             </RadioGroup>
         </FormControl>
     );

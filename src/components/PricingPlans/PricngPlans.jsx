@@ -7,7 +7,7 @@ import { getAllSubscriptions } from '../../apis/api';
 import briefcase from '../../assets/briefcase-office-svgrepo-com.svg';
 import manSuit from '../../assets/man-suit-work-svgrepo-com.svg';
 import moneyTree from '../../assets/money-tree-financial-svgrepo-com.svg';
-import news from '../../assets/news-news-release-to-promote-svgrepo-com.svg';
+import entry from '../../assets/entry.jpeg';
 import './PricingPlans.css';
 
 const PricingPlans = () => {
@@ -41,7 +41,7 @@ const PricingPlans = () => {
   useEffect(() => {
     updateCoinPrices();
     updateSubscriptionPlans();
-    setPlansCovers([news, moneyTree, manSuit]);
+    setPlansCovers(['entry', 'advance', 'pro']);
     const intervalId = setInterval(() => {
       updateCoinPrices();
     }, 180000); // 3 minutes
