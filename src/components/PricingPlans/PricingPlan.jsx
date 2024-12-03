@@ -139,7 +139,8 @@ const PricingPlan = ({
       }
   
       // Step 3: If Telegram ID is available, proceed to finalize the subscription
-      collectedSubscriptionData.telegram_id = window.Telegram?.WebApp?.initData || manualTelegramId;
+      collectedSubscriptionData.telegram_id = window.Telegram?.WebApp?.initData 
+        ||  (manualTelegramId.startsWith('@') ? manualTelegramId : `@${manualTelegramId}`);
   
       // Call final step with all the data
       finalizeSubscription(collectedSubscriptionData);
