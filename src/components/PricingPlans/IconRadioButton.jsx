@@ -7,14 +7,18 @@ const IconRadioButton = ({ options, selectedCoin, onCoinChangeHandler }) => {
       {options.map((option) => (
         <div
           key={option.value}
-          className={`icon-radio-button ${selectedCoin === option.value ? 'selected' : ''}`}
+          className={`icon-radio-button ${selectedCoin === option.value ? 'selected' : ''} ${option.label === 'TCAT' ? 'disabled' : ''}`}
           onClick={
-            () => onCoinChangeHandler(option.value)
+            () => {
+              if (option.label !== 'TCAT') {
+                onCoinChangeHandler(option.value);
+              }
+            }
           }
         >
           {/* Always display the icon */}
           <img src={option.icon} alt={option.label} />
-          <p>{option.label}</p>
+          <p>{option.label === 'TCAT' ? `🛠 ${option.label} to come 🛠️`:option.label}</p>
         </div>
       ))}
     </div>
