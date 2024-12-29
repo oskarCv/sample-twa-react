@@ -5,6 +5,7 @@ export const ROUTES = {
     HOME: "/",
     ABOUT: "/about",
     SUBSCRIPTION: "/subscription",
+    SUBSCRIPPTIONVALIDATION: "/validate-subscription"
   };
 
 // External uris  ... 

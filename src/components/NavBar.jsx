@@ -14,16 +14,15 @@ export default function NavBar({ network, isConnected }) {
           <Button color="inherit" component={Link} to={ROUTES.HOME}>
             home
           </Button>
-          { shouldDisplaySubscription && ( 
+          { shouldDisplaySubscription && isConnected ? ( 
             <Button color="inherit" component={Link} to={ROUTES.SUBSCRIPTION}>
               subscription
             </Button>
-          )}
-          <Button color="inherit" component={Link} to={ROUTES.ABOUT}>
-            about
-          </Button>
+          ) : ''}
+          { isConnected ? <Button color="inherit" component={Link} to={ROUTES.SUBSCRIPPTIONVALIDATION}>
+          Verify_Subscription
+          </Button> : ''}
         </>
-        {/* TonConnectButton */}
         <TonConnectButton />
       </Toolbar>
     </AppBar>
