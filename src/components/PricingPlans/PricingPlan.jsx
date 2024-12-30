@@ -7,7 +7,6 @@ import {
   getTransactionDetails,
   postUserSubscription,
 } from "../../apis/api";
-import { convertUTime } from "../../utils/timeHelpers";
 import PropTypes from "prop-types";
 import IconRadioButton from "./IconRadioButton";
 import tonIconLight from "../../assets/ton-ico.png";
@@ -21,8 +20,6 @@ import "react-toastify/dist/ReactToastify.css";
 const PricingPlan = ({
   planType,
   price,
-  months,
-  // detail,
   iconSrc,
   description,
   discount,
@@ -39,7 +36,7 @@ const PricingPlan = ({
   const [collectedSubscriptionData, setCollectedSubscriptionData] = useState(null);
   const navigate = useNavigate();
 
-  const dollar = 1000000;
+  const dollar = 1000000000;
 
   const onCoinChangeHandler = (coin) => {
     setSelectedCoin(coin);
@@ -57,7 +54,7 @@ const PricingPlan = ({
     messages: [
       {
         address: "UQB5diORt6LZ8WT7ZkfigqWUtfWJ1yJTR3TvTG-wXhesveu6",
-        amount: dollar,
+        amount: equivalentCoinPrice * dollar
       },
     ],
   };
@@ -77,8 +74,12 @@ const PricingPlan = ({
     try {
       await tonConnectUI.sendTransaction(paymentDefinition);
       console.log('Transaction sent successfully');
-    } catch (error) {
-      console.error('Transaction failed:', error);
+    } catch (e) {
+      if (e.message.includes('TON_CONNECT_SDK_ERROR')) {
+        throw new Error('Wallet operation: Operation may be cancelled !!!');        
+      } else {
+        throw new Error('Wallet operation error');
+      } 
     }
   }
   
@@ -187,7 +188,6 @@ const PricingPlan = ({
       <div className={`${planType.toLowerCase()} box`}>
         <h2 className="title">{planType}</h2>
         <div className={`view ${iconSrc}-cover`}>
-          {console.log('<ocv> icosrc ', iconSrc)}
           <div className="cost">
             {discount > 0 && (
               <div className="discount-section">

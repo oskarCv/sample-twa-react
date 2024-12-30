@@ -21,7 +21,7 @@ function App() {
   // Log the wallet address and set connection status
   useEffect(() => {
     if (wallet) {
-      console.warn("<ocv> Connected wallet ID:", wallet); // Log the wallet
+      console.warn("Connected wallet ID:", wallet); // Log the wallet
       setIsConnected(true); // Set as true when the wallet is connected
     } else {
       setIsConnected(false); // Set as false when there is no wallet
@@ -58,7 +58,7 @@ function App() {
             {/* Routes */}
             <Routes>
               <Route path="/" element={<Home isConnected={isConnected} />} />
-              <Route path="/about" element={<About />} />
+              {/* <Route path="/about" element={<About />} /> */}
 
               {/* Protect the subscription route */}
               {isConnected ? (
