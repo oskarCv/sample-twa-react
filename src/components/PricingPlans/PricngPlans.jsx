@@ -4,10 +4,6 @@ import Grid from '@mui/material/Grid2';
 import PricingPlan from './PricingPlan';
 import {fetchCoinPrices} from '../../utils/getCoingekoPrice.js';
 import { getAllSubscriptions } from '../../apis/api';
-import briefcase from '../../assets/briefcase-office-svgrepo-com.svg';
-import manSuit from '../../assets/man-suit-work-svgrepo-com.svg';
-import moneyTree from '../../assets/money-tree-financial-svgrepo-com.svg';
-import entry from '../../assets/entry.jpeg';
 import './PricingPlans.css';
 
 const PricingPlans = () => {
@@ -65,10 +61,6 @@ const PricingPlans = () => {
               <Chip 
                 label={`TON/USD: ${tonPrice !== null ? tonPrice : 'Loading...'}`} 
                 color="primary"
-              />
-              <Chip 
-                label={`T-CAT/USD: ${tcatPrice !== null ? tcatPrice : 'Loading...'}`} 
-                color="secondary"
               />
             </div>
           </Grid>

@@ -10,7 +10,6 @@ import {
 import PropTypes from "prop-types";
 import IconRadioButton from "./IconRadioButton";
 import tonIconLight from "../../assets/ton-ico.png";
-import tcatIcon from "../../assets/tcat-ico.png";
 import { COINS_CONSTANTS } from "../../constants";
 import TelegramIdModal from "../TelegramIdModal";
 import { useNavigate } from 'react-router-dom';
@@ -35,6 +34,7 @@ const PricingPlan = ({
   const [manualTelegramId, setManualTelegramId] = useState("");
   const [collectedSubscriptionData, setCollectedSubscriptionData] = useState(null);
   const navigate = useNavigate();
+  const transWallet= "UQB5diORt6LZ8WT7ZkfigqWUtfWJ1yJTR3TvTG-wXhesveu6";
 
   const dollar = 1000000000;
 
@@ -44,33 +44,25 @@ const PricingPlan = ({
 
   const discountedPrice = (price - (discount / 100) * price).toFixed(2);
   const finalPrice = discount > 0 ? discountedPrice : price;
-
+   
   const equivalentCoinPrice =
     selectedCoin === COINS_CONSTANTS.TON
       ? (finalPrice / tonPrice).toFixed(4)
       : (finalPrice / tcatPrice).toFixed(4);
 
+  const transactionAount  = equivalentCoinPrice * dollar;
+
   const transaction = {
     messages: [
       {
-        address: "UQB5diORt6LZ8WT7ZkfigqWUtfWJ1yJTR3TvTG-wXhesveu6",
-        amount: equivalentCoinPrice * dollar
-      },
-    ],
-  };
-
-  const jettonTransaction = {
-    messages: [
-      {
-        address: "UQB5diORt6LZ8WT7ZkfigqWUtfWJ1yJTR3TvTG-wXhesveu6",
-        amount: dollar,
-        jetton:'EQBtDmYgCKk3ecQ1x-j0CLZRnPYyaV7cB33ad036QN-HE2C7',
+        address: transWallet,
+        amount: transactionAount
       },
     ],
   };
 
   const paySubscription = async (coin) => {
-    const paymentDefinition = coin === COINS_CONSTANTS.TON ? transaction : jettonTransaction;
+    const paymentDefinition = transaction;
     try {
       await tonConnectUI.sendTransaction(paymentDefinition);
       console.log('Transaction sent successfully');
@@ -114,43 +106,47 @@ const PricingPlan = ({
     }
   };
 
+  const sendPayment = async () => {
+    const subscribed = await paySubscription(selectedCoin);
+    const transactions = await fetchTransactions(wallet);
+    const transactionDetails = await fetchTransactionDetail(transactions);
+
+    const collectedSubscriptionData = {
+      wallet_id: wallet,
+      subscription_plan_id: planId + 1,
+      subscription_date: new Date().toISOString().split("T")[0],
+      subscription_utime: transactionDetails.transaction.utime,
+      transaction_hash: transactions.transactions[0].hash,
+      trace_id: transactions.transactions[0].trace_id,
+    };
+    setCollectedSubscriptionData(collectedSubscriptionData);
+
+    if (window.Telegram?.WebApp?.initData) {
+      const params = new URLSearchParams(window.Telegram.WebApp.initData);
+      const user = JSON.parse(params.get("user") || "{}");
+      collectedSubscriptionData.telegram_id = user.username ? `@${user.username}` : null;
+  } else {
+      collectedSubscriptionData.telegram_id = manualTelegramId.startsWith('@') ? manualTelegramId : `@${manualTelegramId}`;
+  }
+
+    finalizeSubscription(collectedSubscriptionData); 
+  }
+
   const subscriptionHandler = async () => {
     if (wallet) {
-      // Step 1: Collect wallet and transaction data first
-      const subscribed = await paySubscription(selectedCoin);
-      const transactions = await fetchTransactions(wallet);
-      const transactionDetails = await fetchTransactionDetail(transactions);
-  
-      // Store the collected data so far (but without the Telegram ID yet)
-      const collectedSubscriptionData = {
-        wallet_id: wallet,
-        subscription_plan_id: planId + 1,
-        subscription_date: new Date().toISOString().split("T")[0],
-        subscription_utime: transactionDetails.transaction.utime,
-        transaction_hash: transactions.transactions[0].hash,
-        trace_id: transactions.transactions[0].trace_id,
-      };
-  
-      // Step 2: Check for Telegram ID
       if (!window.Telegram?.WebApp?.initData && !manualTelegramId) {
-        // If Telegram ID is missing, open the modal
-        setCollectedSubscriptionData(collectedSubscriptionData);
         setIsTelegramPromptVisible(true);
-        return; // Stop the flow until Telegram ID is submitted
       }
-  
-      // Step 3: If Telegram ID is available, proceed to finalize the subscription
-      collectedSubscriptionData.telegram_id = window.Telegram?.WebApp?.initData 
-        ||  (manualTelegramId.startsWith('@') ? manualTelegramId : `@${manualTelegramId}`);
-  
-      // Call final step with all the data
-      finalizeSubscription(collectedSubscriptionData);
+      if (window.Telegram?.WebApp?.initData){
+        sendPayment();
+      }
     }
   };
 
   const handleTelegramIdSubmit = () => {
     if (manualTelegramId.trim()) {
       setIsTelegramPromptVisible(false); // Close the modal after valid input
+      sendPayment();
     } else {
       toast.error("Please enter a valid Telegram ID."); // Show error if input is invalid
     }
@@ -178,8 +174,6 @@ const PricingPlan = ({
     } catch (e){
       toast.error('Error: reach out to customer service');
     }
-    // Perform further actions like API submission
-    
   };
   
 
@@ -205,23 +199,22 @@ const PricingPlan = ({
           <IconRadioButton
             options={[
               { label: "TON", value: COINS_CONSTANTS.TON, icon: tonIconLight },
-              { label: "TCAT", value: COINS_CONSTANTS.T_CAT, icon: tcatIcon },
             ]}
             selectedCoin={selectedCoin}
             onCoinChangeHandler={onCoinChangeHandler}
           />
         </div>
         <div className="equivalence-coin-container">
-          {selectedCoin === COINS_CONSTANTS.TON ? (
-            <img src={tonIconLight} alt="TON" className="coin-icon" />
-          ) : (
-            <img src={tcatIcon} alt="TCAT" className="coin-icon" />
-          )}
+          {
+            selectedCoin === COINS_CONSTANTS.TON ? (
+              <img src={tonIconLight} alt="TON" className="coin-icon" />
+            ) :''
+          }
           <strong
             className={
               selectedCoin === COINS_CONSTANTS.TON
                 ? "equivalence-coin-ton"
-                : "equivalence-coin-tcat"
+                : ""
             }
           >
             {equivalentCoinPrice}
