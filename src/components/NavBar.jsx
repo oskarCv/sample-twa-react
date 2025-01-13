@@ -9,20 +9,20 @@ export default function NavBar({ network, isConnected }) {
     const shouldDisplaySubscription = () => isConnectedMainNet(isConnected, network);
   return (
     <AppBar position="sticky" sx={{ marginBottom: 4 }}>
-      <Toolbar sx={{ justifyContent: "flex-end" }}>
-        <>
+      <Toolbar sx={{ justifyContent: "flex-end", flexWrap: "wrap" }}>
+        <div className="nav-container">
           <Button color="inherit" component={Link} to={ROUTES.HOME}>
-            home
+            <span className="nav-text">home</span>
           </Button>
           { shouldDisplaySubscription && isConnected ? ( 
             <Button color="inherit" component={Link} to={ROUTES.SUBSCRIPTION}>
-              subscription
+              <span className="nav-text">subscription</span>
             </Button>
           ) : ''}
           { isConnected ? <Button color="inherit" component={Link} to={ROUTES.SUBSCRIPPTIONVALIDATION}>
-          Verify_Subscription
+            <span className="nav-text">Verify_Subscription</span>
           </Button> : ''}
-        </>
+        </div>
         <TonConnectButton />
       </Toolbar>
     </AppBar>

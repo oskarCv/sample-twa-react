@@ -281,3 +281,12 @@ button:hover {
 .coin-icon{
     width: 30px;
 }
+
+.nav-text{
+    text-transform: lowercase;
+}
+.nav-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}

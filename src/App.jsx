@@ -37,7 +37,7 @@ function App() {
           backgroundColor: "#e8e8e8",
           color: "black",
           minHeight: "100vh",
-          minWidth: "100vw",
+          minWidth: "700px",
           padding: "20px",
           "@media (prefers-color-scheme: dark)": {
             backgroundColor: "#999",
